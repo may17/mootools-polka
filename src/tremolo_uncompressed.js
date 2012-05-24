@@ -1,8 +1,35 @@
+/*
+---
+script: Class.Mutators.TrackInstances.js
+description: Allows a class to track its instances by having instances array as a class property
+license: MIT-style license
+authors:
+- Elad Ossadon ( http://devign.me | http://twitter.com/elado )
+requires:
+- core:1.2.4
+provides: [Class.Mutators.TrackInstances]
+...
+*/
+Class.Mutators.TrackInstances=function (allow) {
+    if (!allow) return;
+    // save current initialize method
+    var oldInit=this.prototype.initialize;
+    var klass=this;
+    // overwrite initialize method
+    klass.prototype.initialize=function () {
+        (klass.instances=klass.instances || []).push(this);
+        oldInit.apply(this,arguments);
+    };
+};
+
+
+
 var Tremolo = new Class({
     Extends: Fx.Accordion,
     options: {
         anchorItem: '.accordion-wrap',
-        stopAnchorScroll: true
+        stopAnchorScroll: true,
+        doctype: 'html5'
     },
     initialize: function() {
         this.url = this.urlHelper();
@@ -12,8 +39,10 @@ var Tremolo = new Class({
         }
         
         this.parent.apply(this, arguments);
+        this.checkId();
         this.urlInteraction();
     },
+    TrackInstances:true,
     /* urlHelper
      * @return object
      */
@@ -56,5 +85,16 @@ var Tremolo = new Class({
     },
     scrollToElement: function(el) {
         return new Fx.Scroll(window).toElement(el, 'y');
+    },
+    checkId: function() {
+        var _togglers = this.togglers,
+            _instanceCount = Tremolo.instances.length;
+        _togglers.each(function(el, i) {
+            var getParent = el.getParent(),
+                _step = 'step'+_instanceCount+'-'+i;
+            if(!getParent.hasAttribute('id')) {
+                getParent.set('id', _step);
+            }
+        });
     }
 });

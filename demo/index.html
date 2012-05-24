@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>Tremolo - a mootools accordion extension</title>
+    <link type="text/css" href="style.css" rel="stylesheet">
+</head>
+<body>
+<div id="wrap">
+    <h1>Tremolo - A Mootools Accordion Extension<br>
+        <small>by Joe Ray Gregory</small>
+    </h1>
+    <p>
+        Tremolo is an Mootools Accordion Extension. The basic Mootools Accordion is great but sometimes you need more.
+    </p>
+    <p>
+        Tremolo extends the Accordion with the following features:
+    </p>
+    <dl>
+        <dt>Url Extension</dt>
+        <dd>Adds url support to each element. Onclick every element set an anchor fragment to the url. So it` posible to auto open an element. Tremolo has an internal id checker, so if an element dosn` have an id tremolo autgenerates one.</dd>
+        <dt>Smooth Scroll</dt>
+        <dd>If you link to an accordion fragment tremolo srolls automaticly to target via Mootools smooth scroll</dd>
+        <dt>Keyboard controll</dt>
+        <dd>Controll the Accordions via your keyboard. tab and arrow keys are supported.</dd>
+    </dl>
+    <div class="accordion-wrap" id="test">
+        <div class="toggler" aria-expanded="true" role="tab" tabindex="0">An Example Toggler</div>
+        <div class="accordion">
+            <div class="accordion-inner">Some Content that says hello</div>
+        </div>
+    </div>
+    <div class="accordion-wrap" aria-expanded="true" role="tab" tabindex="0">
+        <div class="toggler">Another Example Toggler</div>
+        <div class="accordion">
+            <div class="accordion-inner">Hello again</div>
+        </div>
+    </div>
+    <div class="accordion-wrap" aria-expanded="true" role="tab" tabindex="0">
+        <div class="toggler">Klick me, ivè got an secret...</div>
+        <div class="accordion">
+            <div class="accordion-inner">Uhhh why you look under my skirt?</div>
+        </div>
+    </div>
+</div>
+    <script src="mootools-core.js"></script>
+    <script src="mootools-more.js"></script>
+    <script src="../src/tremolo_uncompressed.js"></script>
+    <script>
+        window.addEvent('domready', function(event) {
+            acc = new Tremolo($$('div.toggler'), $$('div.accordion'), {
+                opacity: false,
+                display: 0,
+                anchorItem: '.accordion-wrap',
+                alwaysHide: true
+            });
+        });
+    </script>
+</body>
+</html>
