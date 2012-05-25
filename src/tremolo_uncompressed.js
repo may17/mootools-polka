@@ -37,8 +37,9 @@ var Tremolo = new Class({
         if(this.url.hasFragment) {
             arguments[2].display = -1;
         }
-        
+
         this.parent.apply(this, arguments);
+        this.addKeyFunction();
         this.checkId();
         this.urlInteraction();
     },
@@ -95,6 +96,29 @@ var Tremolo = new Class({
             if(!getParent.hasAttribute('id')) {
                 getParent.set('id', _step);
             }
+        });
+    },
+    addKeyFunction: function() {
+        var _togglers = this.togglers;
+        _togglers.each(function(el) {
+
+            el.addEvents({
+            'keypress': function(event) {
+                alert(el);
+            },
+            'focus': function() {
+              this.addClass('hover');
+            },
+            'blur': function() {
+              this.removeClass('hover');
+            },
+            'mouseenter': function() {
+              this.addClass('hover');
+            },
+            'mouseleave': function() {
+              this.removeClass('hover');
+            }
+            });
         });
     }
 });

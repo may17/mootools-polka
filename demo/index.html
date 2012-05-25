@@ -25,18 +25,18 @@
         <dd>Controll the Accordions via your keyboard. tab and arrow keys are supported.</dd>
     </dl>
     <div class="accordion-wrap" id="test">
-        <div class="toggler" aria-expanded="true" role="tab" tabindex="0">An Example Toggler</div>
+        <div class="toggler">An Example Toggler</div>
         <div class="accordion">
             <div class="accordion-inner">Some Content that says hello</div>
         </div>
     </div>
-    <div class="accordion-wrap" aria-expanded="true" role="tab" tabindex="0">
+    <div class="accordion-wrap">
         <div class="toggler">Another Example Toggler</div>
         <div class="accordion">
             <div class="accordion-inner">Hello again</div>
         </div>
     </div>
-    <div class="accordion-wrap" aria-expanded="true" role="tab" tabindex="0">
+    <div class="accordion-wrap">
         <div class="toggler">Klick me, ivè got an secret...</div>
         <div class="accordion">
             <div class="accordion-inner">Uhhh why you look under my skirt?</div>
@@ -52,7 +52,21 @@
                 opacity: false,
                 display: 0,
                 anchorItem: '.accordion-wrap',
-                alwaysHide: true
+                alwaysHide: true,
+                onActive: function(tog, el) {
+                  el.setProperty('aria-hidden', 'false');
+                  tog.addClass('active');
+                  tog.getNext('div').fade('in');
+                  tog.setProperty('aria-expanded', 'true');
+                  return false;
+                },
+                onBackground: function(tog, el) {
+                  el.setProperty('aria-hidden', 'true');
+                  tog.removeClass('active');
+                  tog.getNext('div').fade('out');
+                  tog.setProperty('aria-expanded', 'false');
+                  return false;
+                }
             });
         });
     </script>
