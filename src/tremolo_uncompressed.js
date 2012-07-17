@@ -42,6 +42,9 @@ var Tremolo = new Class({
         this.addKeyFunction();
         this.checkId();
         this.urlInteraction();
+
+        //Contao Special
+        //$$('.ce_accordion').setProperty('role', 'tablist');
     },
     TrackInstances:true,
     /* urlHelper
@@ -99,12 +102,16 @@ var Tremolo = new Class({
         });
     },
     addKeyFunction: function() {
-        var _togglers = this.togglers;
+        var _togglers = this.togglers,
+            _elements = this.elements;
         _togglers.each(function(el) {
-
+            el.setProperty('role', 'tab');
+            el.setProperty('tabindex', 0);
             el.addEvents({
             'keypress': function(event) {
-                alert(el);
+                if (event.code == 13) {
+                    this.fireEvent('click');
+                }
             },
             'focus': function() {
               this.addClass('hover');
@@ -119,6 +126,11 @@ var Tremolo = new Class({
               this.removeClass('hover');
             }
             });
+        });
+
+        _elements.each(function(el) {
+            el.setProperty('role', 'tabpanel');
+            el.setProperty('role', 'tabpanel');
         });
     }
 });
