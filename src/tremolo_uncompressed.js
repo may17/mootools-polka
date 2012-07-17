@@ -29,7 +29,8 @@ var Tremolo = new Class({
     options: {
         anchorItem: '.accordion-wrap',
         stopAnchorScroll: true,
-        doctype: 'html5'
+        setAriaSupport: true,
+        ariaTabListElement: '.accordion-wrap'
     },
     initialize: function() {
         this.url = this.urlHelper();
@@ -39,12 +40,14 @@ var Tremolo = new Class({
         }
 
         this.parent.apply(this, arguments);
-        this.addKeyFunction();
+        if(this.options.setAriaSupport) {
+            this.addKeyFunction();
+        }
         this.checkId();
         this.urlInteraction();
 
         //Contao Special
-        //$$('.ce_accordion').setProperty('role', 'tablist');
+        //$$('.ce_accordion')
     },
     TrackInstances:true,
     /* urlHelper
@@ -127,10 +130,9 @@ var Tremolo = new Class({
             }
             });
         });
-
         _elements.each(function(el) {
             el.setProperty('role', 'tabpanel');
-            el.setProperty('role', 'tabpanel');
-        });
+            el.getParent(this.options.ariaTabListElement).setProperty('role', 'tablist');
+        }, this);
     }
 });
