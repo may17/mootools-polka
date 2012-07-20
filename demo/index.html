@@ -18,11 +18,11 @@
     </p>
     <dl>
         <dt>Url Extension</dt>
-        <dd>Adds url support to each element. Onclick every element set an anchor fragment to the url. So it` posible to auto open an element. Tremolo has an internal id checker, so if an element dosn` have an id tremolo autgenerates one.</dd>
+        <dd>Adds url support to each element. On click every element set an anchor fragment to the url. Tremolo has an internal id checker, so if an element dosn`t have an id tremolo generates one.</dd>
         <dt>Smooth Scroll</dt>
-        <dd>If you link to an accordion fragment tremolo srolls automaticly to target via Mootools smooth scroll</dd>
-        <dt>Keyboard controll</dt>
-        <dd>Controll the Accordions via your keyboard. tab and arrow keys are supported.</dd>
+        <dd>If you link to an accordion fragment tremolo scrolls automatically to the target via Mootools smooth scroll</dd>
+        <dt>Keyboard control</dt>
+        <dd>Control the accordions with your keyboard. Tab and enter keys are supported.</dd>
     </dl>
     <div class="accordion-wrap" id="test">
         <div class="toggler">An Example Toggler</div>
@@ -50,7 +50,7 @@
         window.addEvent('domready', function(event) {
             acc = new Tremolo($$('div.toggler'), $$('div.accordion'), {
                 opacity: false,
-                display: 0,
+                display: 1,
                 anchorItem: '.accordion-wrap',
                 alwaysHide: true,
                 onActive: function(tog, el) {

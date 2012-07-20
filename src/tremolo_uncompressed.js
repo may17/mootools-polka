@@ -45,6 +45,11 @@ var Tremolo = new Class({
         }
         this.checkId();
         this.urlInteraction();
+        
+        if(this.options.display >= 0) {
+            this.addFragment(this.togglers[this.options.display].getParent(this.options.anchorItem));
+            arguments[2].display = -1;
+        }
 
         //Contao Special
         //$$('.ce_accordion')
@@ -81,7 +86,7 @@ var Tremolo = new Class({
                 this.displayAndScroll(i, _viewPortItem);
             }
             el.addEvent('click', function(event) {
-                $this.url.obj.set('fragment', '/'+_viewPortItem.get('id')).go();
+                $this.addFragment(_viewPortItem);
                 var setScroller = $this.scrollToElement(_viewPortItem);
             });
         }, this);
@@ -104,10 +109,15 @@ var Tremolo = new Class({
             }
         });
     },
+    addFragment: function(_viewPortItem) {
+        this.url.obj.set('fragment', '/'+_viewPortItem.get('id')).go();
+    },
     addKeyFunction: function() {
         var _togglers = this.togglers,
-            _elements = this.elements;
-        _togglers.each(function(el) {
+            _elements = this.elements,
+            self = this;
+        _togglers.each(function(el, i) {
+        console.log(i);
             el.setProperty('role', 'tab');
             el.setProperty('tabindex', 0);
             el.addEvents({
@@ -115,7 +125,20 @@ var Tremolo = new Class({
                 if (event.code == 13) {
                     this.fireEvent('click');
                 }
-            },
+                
+            },/*
+            'keydown': function(event) {
+                if(event.code == 40) {
+                    console.log(el);
+                    //this.hide();
+                    if(this.getNext()) {
+                        console.log(i);
+                        var t = i;
+                        self.display(t++);
+                    }
+                    
+                }
+            },*/
             'focus': function() {
               this.addClass('hover');
             },
