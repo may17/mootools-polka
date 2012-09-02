@@ -54,18 +54,10 @@
                 anchorItem: '.accordion-wrap',
                 alwaysHide: true,
                 onActive: function(tog, el) {
-                  el.setProperty('aria-hidden', 'false');
-                  tog.addClass('active');
                   tog.getNext('div').fade('in');
-                  tog.setProperty('aria-expanded', 'true');
-                  return false;
                 },
                 onBackground: function(tog, el) {
-                  el.setProperty('aria-hidden', 'true');
-                  tog.removeClass('active');
                   tog.getNext('div').fade('out');
-                  tog.setProperty('aria-expanded', 'false');
-                  return false;
                 }
             });
         });

@@ -26,12 +26,22 @@ Class.Mutators.TrackInstances=function (allow) {
 
 var Tremolo = new Class({
     Extends: Fx.Accordion,
+    /**
+     * Adding new options
+     */
     options: {
         anchorItem: '.accordion-wrap',
         stopAnchorScroll: true,
         setAriaSupport: true,
-        ariaTabListElement: '.accordion-wrap'
+        ariaTabListElement: '.accordion-wrap',
+        cssClasses: {
+            hover: 'hover',
+            active: 'active'
+        }
     },
+    /**
+     * Constructor
+     */
     initialize: function() {
         this.url = this.urlHelper();
         
@@ -51,11 +61,25 @@ var Tremolo = new Class({
             arguments[2].display = -1;
         }
 
-        //Contao Special
-        //$$('.ce_accordion')
+        this.addEvents({
+            'active': function(tog, el) {
+                el.setProperty('aria-hidden', 'false');
+                tog.addClass('active');
+                tog.setProperty('aria-expanded', 'true');
+            },
+            'background': function(tog, el) {
+                el.setProperty('aria-hidden', 'true');
+                tog.removeClass('active');
+                tog.setProperty('aria-expanded', 'false');
+            }
+        });
     },
+    /**
+     * Init the Track Instance Mutator
+     */
     TrackInstances:true,
-    /* urlHelper
+    /**
+     * urlHelper
      * @return object
      */
     urlHelper: function(_uri) {
@@ -70,6 +94,9 @@ var Tremolo = new Class({
             hasFragment: _hasFrag
         }
     }.protect(),
+    /**
+     * check the url and set interactions like open and scroll to element.
+     */
     urlInteraction: function(_uri) {                
         
         var _togglers = this.togglers,
@@ -114,17 +141,37 @@ var Tremolo = new Class({
     },
     addKeyFunction: function() {
         var _togglers = this.togglers,
+<<<<<<< HEAD
             _elements = this.elements,
             self = this;
         _togglers.each(function(el, i) {
         console.log(i);
+=======
+            options = this.options,
+            _elements = this.elements;
+        _togglers.each(function(el) {
+>>>>>>> Adding on background and on active aria support and active state for toggler
             el.setProperty('role', 'tab');
             el.setProperty('tabindex', 0);
             el.addEvents({
-            'keypress': function(event) {
-                if (event.code == 13) {
-                    this.fireEvent('click');
+                'keypress': function(event) {
+                    if (event.code == 13) {
+                        this.fireEvent('click');
+                    }
+                },
+                'focus': function() {
+                    this.addClass(options.cssClasses.hover);
+                },
+                'blur': function() {
+                    this.removeClass(options.cssClasses.hover);
+                },
+                'mouseenter': function() {
+                    this.addClass(options.cssClasses.hover);
+                },
+                'mouseleave': function() {
+                    this.removeClass(options.cssClasses.hover);
                 }
+<<<<<<< HEAD
                 
             },/*
             'keydown': function(event) {
@@ -151,6 +198,8 @@ var Tremolo = new Class({
             'mouseleave': function() {
               this.removeClass('hover');
             }
+=======
+>>>>>>> Adding on background and on active aria support and active state for toggler
             });
         });
         _elements.each(function(el) {
