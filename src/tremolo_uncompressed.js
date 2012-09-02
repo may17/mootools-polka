@@ -141,16 +141,9 @@ var Tremolo = new Class({
     },
     addKeyFunction: function() {
         var _togglers = this.togglers,
-<<<<<<< HEAD
-            _elements = this.elements,
-            self = this;
-        _togglers.each(function(el, i) {
-        console.log(i);
-=======
             options = this.options,
             _elements = this.elements;
         _togglers.each(function(el) {
->>>>>>> Adding on background and on active aria support and active state for toggler
             el.setProperty('role', 'tab');
             el.setProperty('tabindex', 0);
             el.addEvents({
@@ -171,35 +164,6 @@ var Tremolo = new Class({
                 'mouseleave': function() {
                     this.removeClass(options.cssClasses.hover);
                 }
-<<<<<<< HEAD
-                
-            },/*
-            'keydown': function(event) {
-                if(event.code == 40) {
-                    console.log(el);
-                    //this.hide();
-                    if(this.getNext()) {
-                        console.log(i);
-                        var t = i;
-                        self.display(t++);
-                    }
-                    
-                }
-            },*/
-            'focus': function() {
-              this.addClass('hover');
-            },
-            'blur': function() {
-              this.removeClass('hover');
-            },
-            'mouseenter': function() {
-              this.addClass('hover');
-            },
-            'mouseleave': function() {
-              this.removeClass('hover');
-            }
-=======
->>>>>>> Adding on background and on active aria support and active state for toggler
             });
         });
         _elements.each(function(el) {
