@@ -26,22 +26,32 @@ Class.Mutators.TrackInstances=function (allow) {
 
 var Tremolo = new Class({
     Extends: Fx.Accordion,
+
     /**
      * Adding new options
      */
+
     options: {
         anchorItem: '.accordion-wrap',
-        stopAnchorScroll: true,
+        /* TODO Adding scroll to cureent accordion everytime clicking on a toggler
+        scrollOnClick: true,
+        */
         setAriaSupport: true,
+        scrollOffset: {
+            x: 0,
+            y: 0
+        },
         ariaTabListElement: '.accordion-wrap',
         cssClasses: {
             hover: 'hover',
             active: 'active'
         }
     },
+
     /**
      * Constructor
      */
+
     initialize: function() {
         this.url = this.urlHelper();
         
@@ -74,14 +84,18 @@ var Tremolo = new Class({
             }
         });
     },
+
     /**
      * Init the Track Instance Mutator
      */
-    TrackInstances:true,
+
+    TrackInstances: true,
+
     /**
      * urlHelper
      * @return object
      */
+
     urlHelper: function(_uri) {
         _uri = _uri || location.href;
         var _url = new URI(_uri),
@@ -94,10 +108,14 @@ var Tremolo = new Class({
             hasFragment: _hasFrag
         }
     }.protect(),
+
     /**
-     * check the url and set interactions like open and scroll to element.
+     * method urlInteraction
+     * @desc check the url and set interactions like open and scroll to element.
+     * @param _uri
      */
-    urlInteraction: function(_uri) {                
+
+    urlInteraction: function(_uri) {
         
         var _togglers = this.togglers,
             _elements = this.elements,
@@ -114,17 +132,47 @@ var Tremolo = new Class({
             }
             el.addEvent('click', function(event) {
                 $this.addFragment(_viewPortItem);
-                var setScroller = $this.scrollToElement(_viewPortItem);
+
+                /* TODO Adding scroll to cureent accordion everytime clicking on a toggler
+                if($this.options.scrollOnClick)
+                    $this.scrollToElement(_viewPortItem);
+                */
             });
         }, this);
     },
+
+    /**
+     *
+     * @param item
+     * @param el
+     */
+
     displayAndScroll: function(item, el) {
         this.display(item);
         var setScroller = this.scrollToElement(el);
     },
+
+    /**
+     * Main method to execute the scroll effect
+     * @param el
+     * @returns {*}
+     */
+
     scrollToElement: function(el) {
-        return new Fx.Scroll(window).toElement(el, 'y');
+        var fxx = new Fx.Scroll(window, {
+            offset: {
+                x: this.options.scrollOffset.x,
+                y: this.options.scrollOffset.y
+            }
+        });
+
+        return fxx.start(0, el.getPosition().y);
     },
+
+    /**
+     * check if every element has an id, if not set one by checkin the instances
+     */
+
     checkId: function() {
         var _togglers = this.togglers,
             _instanceCount = Tremolo.instances.length;
@@ -136,9 +184,20 @@ var Tremolo = new Class({
             }
         });
     },
+
+    /**
+     * adding the fragement to the uri
+     * @param _viewPortItem
+     */
+
     addFragment: function(_viewPortItem) {
         this.url.obj.set('fragment', '/'+_viewPortItem.get('id')).go();
     },
+
+    /**
+     * Adds the keyboard function
+     */
+
     addKeyFunction: function() {
         var _togglers = this.togglers,
             options = this.options,
@@ -166,6 +225,7 @@ var Tremolo = new Class({
                 }
             });
         });
+
         _elements.each(function(el) {
             el.setProperty('role', 'tabpanel');
             el.getParent(this.options.ariaTabListElement).setProperty('role', 'tablist');
