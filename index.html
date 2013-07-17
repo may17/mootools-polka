@@ -18,7 +18,7 @@
       <div class="inner">
 
         <header>
-          <h1>accordion-polka</h1>
+          <h1>Fx.Accordion.Polka</h1>
           <h2>An Mootools Accordion Extension</h2>
         </header>
 
@@ -31,37 +31,50 @@
         <hr>
 
         <section id="main_content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        	<h3>What is Polka?</h3>
+        	<p>Polka extends the famous mootools-more accordion with some new features.</p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+		    <h3>Tell me more what features could i expect?</h3>
+			<ul>
+				<li>Open Accordion items via the url</li>
+				<li>Url Hash Updating</li>
+				<li>Optional build in Aria Support for more accesibillity</li>
+				<li>If the Accordion wrapping element dosn`t have an id, polka will create one</li>
+				<li>Extends the mootools-more accordion</li>
+				<li>Some new callbacks</li>
+			</ul>
+			
+			<h3>Quickstart</h3>
+			
+			<h3>Options</h3>
+			
+					<dl>
+						<dt>anchorItem</dt>
+						<dd>Polka expects a query selector to detect the wrapper of each accordion. Default '.accordion-wrap'</dd>
+						
+						<dt>jumpToOnClick</dt>
+						<dd>Polka automaticly scrolls to the beginning of the active toggler element top. Default true</dd>
+						
+						<dt>setAriaSupport</dt>
+						<dd>Adding some features for better accessibility. Default true</dd>
+						
+						<dt>ariaTabListElement</dt>
+						<dd>If setAriaSupport, you should define wich element should get the tablist Attribute. Default '.accordion-wrap'</dd>
+						
+						<dt>autoItemName</dt>
+						<dd>If Polka didn`t detect an id, wich is nessecery for a anchor jump, polka will automaticcly create this id`s. With this option you can define a own default id name. Default 'accordion-item'</dd>
+						
+						<dt>scrollOffset</dt>
+						<dd>Maybe you need some offset for the scrolling. Default { x: 0, y: 0 }</dd>
+						
+						<dt>pseudoFragment</dt>
+						<dd>Polka works with pseudo fragments. The Fragments in the url always </dd>
+						
+						
+					</dl>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+			
+			<h3>Callbacks</h3>
         </section>
 
         <footer>
