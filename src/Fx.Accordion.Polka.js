@@ -1,30 +1,4 @@
-/*
----
-script: Class.Mutators.TrackInstances.js
-description: Allows a class to track its instances by having instances array as a class property
-license: MIT-style license
-authors:
-- Elad Ossadon ( http://devign.me | http://twitter.com/elado )
-requires:
-- core:1.2.4
-provides: [Class.Mutators.TrackInstances]
-...
-*/
-Class.Mutators.TrackInstances=function (allow) {
-    if (!allow) return;
-    // save current initialize method
-    var oldInit=this.prototype.initialize;
-    var klass=this;
-    // overwrite initialize method
-    klass.prototype.initialize=function () {
-        (klass.instances=klass.instances || []).push(this);
-        oldInit.apply(this,arguments);
-    };
-};
-
-
-
-var Tremolo = new Class({
+Fx.Accordion.Polka = new Class({
     Extends: Fx.Accordion,
 
     /**
@@ -32,24 +6,34 @@ var Tremolo = new Class({
      */
 
     options: {
+        // needed to clerly identify the wrapper of each toggler and accordion content element
         anchorItem: '.accordion-wrap',
-        /* TODO Adding scroll to cureent accordion everytime clicking on a toggler
-        scrollOnClick: true,
-        */
+        // jumps with to the toggler start
+        jumpToOnClick: true,
+        // Set basic aria support to the elements
         setAriaSupport: true,
+        // define the aria Tablist wrapper, mostly the same like anchorItem
+        ariaTabListElement: '.accordion-wrap',
+        // define the name off the auto generated anchors
+        autoItemName: 'accordion-item',
+        // set a offset for the autoscroll
         scrollOffset: {
             x: 0,
             y: 0
         },
-        ariaTabListElement: '.accordion-wrap',
+        //name of the css classes
         cssClasses: {
             hover: 'hover',
             active: 'active'
-        }
+        },
+        pseudoFragment: '/'
+        /*
+        onFragmentAdded: function(instance) { //your Code }
+         */
     },
 
     /**
-     * Constructor
+     * Initializer Method on construct
      */
 
     initialize: function() {
@@ -60,33 +44,47 @@ var Tremolo = new Class({
         }
 
         this.parent.apply(this, arguments);
-        if(this.options.setAriaSupport) {
-            this.addKeyFunction();
-        }
+
+        // check if the elements got an id and set them if not
         this.checkId();
+
         this.urlInteraction();
-        
+
         if(this.options.display >= 0) {
-            this.addFragment(this.togglers[this.options.display].getParent(this.options.anchorItem));
-            arguments[2].display = -1;
+            this.doNotJumpToAnchor(this.togglers[this.options.display].getParent(this.options.anchorItem));
         }
 
-        this.addEvents({
-            'active': function(tog, el) {
-                el.setProperty('aria-hidden', 'false');
-                tog.addClass('active');
-                tog.setProperty('aria-expanded', 'true');
-            },
-            'background': function(tog, el) {
-                el.setProperty('aria-hidden', 'true');
-                tog.removeClass('active');
-                tog.setProperty('aria-expanded', 'false');
-            }
+        if(this.options.setAriaSupport) {
+            this.addKeyFunction();
+
+
+            this.addEvents({
+                'active': function(tog, el) {
+                    el.setProperty('aria-hidden', 'false');
+                    tog.addClass('active');
+                    tog.setProperty('aria-expanded', 'true');
+                },
+                'background': function(tog, el) {
+                    el.setProperty('aria-hidden', 'true');
+                    tog.removeClass('active');
+                    tog.setProperty('aria-expanded', 'false');
+                }
+            });
+        }
+
+    },
+
+    doNotJumpToAnchor: function(frag) {
+        var scrollBuffer = window.getScroll();
+
+
+        this.addEvent('complete:once', function() {
+            this.addFragment(frag);
         });
     },
 
     /**
-     * Init the Track Instance Mutator
+     * Set instance tracking
      */
 
     TrackInstances: true,
@@ -119,24 +117,30 @@ var Tremolo = new Class({
         
         var _togglers = this.togglers,
             _elements = this.elements,
+            self = this,
             _fired = false;
         
         _togglers.each(function(el, i) {
             
             var _viewPortItem = el.getParent(this.options.anchorItem) || false,
-                $this = this,
-                c = this.url.getFragment.split('/');
+                _urlFragment = this.url.getFragment.substr(1);
 
-            if(_viewPortItem.get('id') == c[1]) {
+            if(_viewPortItem.get('id') == _urlFragment) {
+                window.scrollTo(0, 0);
                 this.displayAndScroll(i, _viewPortItem);
             }
-            el.addEvent('click', function(event) {
-                $this.addFragment(_viewPortItem);
 
-                /* TODO Adding scroll to cureent accordion everytime clicking on a toggler
-                if($this.options.scrollOnClick)
-                    $this.scrollToElement(_viewPortItem);
-                */
+            el.addEvent('click', function(event) {
+                var tt = el.getParent(self.options.anchorItem) || false;
+
+
+                if(!self.options.jumpToOnClick) {
+                    self.doNotJumpToAnchor(_viewPortItem);
+                } else {
+                    self.addEvent('complete:once', function() {
+                        self.scrollToElement(tt, true);
+                    });
+                }
             });
         }, this);
     },
@@ -149,7 +153,7 @@ var Tremolo = new Class({
 
     displayAndScroll: function(item, el) {
         this.display(item);
-        var setScroller = this.scrollToElement(el);
+        this.scrollToElement(el);
     },
 
     /**
@@ -158,12 +162,16 @@ var Tremolo = new Class({
      * @returns {*}
      */
 
-    scrollToElement: function(el) {
+    scrollToElement: function(el, addFrag) {
+        addFrag = addFrag || false;
+
         var fxx = new Fx.Scroll(window, {
-            offset: {
-                x: this.options.scrollOffset.x,
-                y: this.options.scrollOffset.y
-            }
+            offset: this.options.scrollOffset,
+            onComplete: function() {
+                if(addFrag) {
+                    this.addFragment(el);
+                }
+            }.bind(this)
         });
 
         return fxx.start(0, el.getPosition().y);
@@ -175,10 +183,11 @@ var Tremolo = new Class({
 
     checkId: function() {
         var _togglers = this.togglers,
-            _instanceCount = Tremolo.instances.length;
+            _self = this,
+            _instanceCount = Fx.Accordion.Polka.instances.length;
         _togglers.each(function(el, i) {
             var getParent = el.getParent(),
-                _step = 'step'+_instanceCount+'-'+i;
+                _step = _self.options.autoItemName+_instanceCount+'-'+i;
             if(!getParent.hasAttribute('id')) {
                 getParent.set('id', _step);
             }
@@ -191,7 +200,8 @@ var Tremolo = new Class({
      */
 
     addFragment: function(_viewPortItem) {
-        this.url.obj.set('fragment', '/'+_viewPortItem.get('id')).go();
+        this.url.obj.set('fragment', this.options.pseudoFragment+_viewPortItem.get('id')).go();
+        this.fireEvent('fragmentAdded', this);
     },
 
     /**
@@ -230,5 +240,12 @@ var Tremolo = new Class({
             el.setProperty('role', 'tabpanel');
             el.getParent(this.options.ariaTabListElement).setProperty('role', 'tablist');
         }, this);
+    }
+});
+
+Elements.implement({
+    makePolka: function(accordions, options) {
+        options = options || {};
+        new Fx.Accordion.Polka(this, accordions, options);
     }
 });
